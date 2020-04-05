@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <style>
+        a:link, a:visited{
+               color: #039;
+               display: inline-block;
+               text-decoration: none;
+               text-transform: uppercase;
+               letter-spacing: 1px;
+               margin: 10px 15px;
+               padding: 10px 15px;
+               font-size: 15px;
+               font-weight: bold;
+               font-family: 'Montserrat', sans-serif;
+               transition: 0.4s ease-in-out;
+                }
+        table {
+               margin: auto;
+               font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+               font-size: 14px;
+               background: white;
+               max-width: 85%;
+               width: 85%;
+               border-collapse: collapse;
+               text-align: left;
+             }
+        th {
+               font-weight: normal;
+               color: #039;
+               border-bottom: 2px solid #6678b1;
+               padding: 10px 8px;
+             }
+        td {
+                border-bottom: 1px solid #ccc;
+                color: #669;
+                padding: 9px 8px;
+                transition: .3s linear;
+        h2{
+                width: 100%;
+                background-color: red;
+           }
+
+    </style>
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+        <h2>{{ current_user.name }}</h2>
+        <a class="navbar-brand" href="/logout" style="margin:0px 0px; padding:0px 0px; font-size: 11px;">Logout</a>
+    {% else %}
+        <p>
+            <a class="btn btn-primary " href="/register">Register</a>
+            <a class="btn btn-success" href="/login">Sign up</a>
+        </p>
+    {% endif %}
+    <h1>Миссия Колонизация Марса</h1>
+    <h5>И на Марсе будут яблони цвести!</h5>
+    <h1 style="text-align: center;">Works log</h1>
+    {% if current_user.is_authenticated %}
+        <a href="jobs" class="btn btn-secondary" style="margin: 10px 7%;">Add job</a>
+    {% endif %}
+    <a href="departments" class="btn btn-secondary" style="margin: 10px 7%;">List of departments</a>
+    <table>
+        <tr><th>Title of activity</th><th>Team leader</th><th>Duration</th><th>List of collaborators</th><th>Is inished</th></tr>
+        {% for jobs in jobs %}
+            <tr><td>{{jobs.job}}</td><td>{{jobs.team_leader}}</td><td>{{jobs.work_size}}</td><td>{{jobs.collaborators}}</td><td>{{jobs.is_finished}}</td></tr>
+            {% if current_user.is_authenticated and current_user == jobs.user or current_user.id == 1 %}
+                <tr><td></td><td></td><td></td><td><a href="/jobs/{{ jobs.id }}" class="btn btn-warning">Edit</a></td><td><a href="/jobs_delete/{{ jobs.id }}" class="btn btn-danger">Delete</a></td></tr>
+            {% endif %}
+        {% endfor %}
+     </table>
+
+</body>
+</html>
